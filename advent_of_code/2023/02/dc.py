@@ -1,7 +1,5 @@
 from dataclasses import dataclass, fields
 
-from advent_of_code.utils.constants import DATA_PATH_2023
-
 
 @dataclass
 class Bag:
@@ -12,6 +10,13 @@ class Bag:
     def __iter__(self):
         for field in fields(self):
             yield field.name, getattr(self, field.name)
+
+    def power(self):
+        tot = 1
+        for _, value in self:
+            tot *= value
+
+        return tot
 
 
 @dataclass
@@ -43,19 +48,12 @@ class Game:
 
         return True
 
+    def min_bag(self):
+        d = {}
+        for field in fields(Bag):
+            color = field.name
+            d[color] = getattr(
+                max(self.bag_list, key=lambda x: getattr(x, color)), color
+            )
 
-def main():
-
-    tot = 0
-    master_bag = Bag(red=12, green=13, blue=14)
-    path = DATA_PATH_2023 / "02.txt"
-    with open(path, "r") as f:
-        for line in f.readlines():
-            gp = Game.process(line)
-            tot += gp._id if gp.is_valid(master_bag) else 0
-
-    print(tot)
-
-
-if __name__ == "__main__":
-    main()
+        return Bag(**d)
