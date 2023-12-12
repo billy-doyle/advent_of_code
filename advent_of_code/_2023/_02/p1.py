@@ -1,4 +1,4 @@
-from dc import Bag, Game
+from advent_of_code._2023._02.dc import Bag, Game
 from advent_of_code.utils.constants import DATA_PATH_2023
 
 
